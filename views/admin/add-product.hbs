@@ -1,0 +1,24 @@
+<section>
+    <div class="container mt-5">
+        <h2 class="text-center">Add Product</h2>
+        <form action="/admin/add-product" enctype="multipart/form-data" method="post">
+            <div class="form-group">
+                <label for="product-name">Name</label>
+                <input type="text" class="form-control" id="product-name" name="product-name">
+            </div>
+            <div class="form-group">
+                <label for="product-category">Category</label>
+                <input type="text" class="form-control" id="product-category" name="product-category">
+            </div>
+            <div class="form-group">
+                <label for="product-varient">Varient</label>
+                <input type="text" class="form-control" id="product-varient" name="product-varient">
+            </div>
+            <div class="form-group">
+                <label for="image">Image</label>
+                <input type="file" class="form-control" id="image" name="image">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</section>
