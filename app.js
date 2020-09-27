@@ -8,6 +8,7 @@ var adminRouter = require('./routes/admin');
 var userRouter = require('./routes/user');
 var fileUpload = require('express-fileupload');
 var db = require('./config/connection');
+var Handlebars = require('handlebars')
 
 var app = express();
 
@@ -34,6 +35,10 @@ db.connect((err) =>{
 });
 app.use('/admin', adminRouter);
 app.use('/', userRouter);
+
+Handlebars.registerHelper('inc', (value,options) => {
+  return parseInt(value) +1;
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
