@@ -1,5 +1,4 @@
 var express = require('express');
-const { handlebars } = require('hbs');
 const app = require('../app');
 var router = express.Router();
 const productHelpers = require('../helpers/product-helpers')
