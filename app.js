@@ -9,6 +9,7 @@ var userRouter = require('./routes/user');
 var fileUpload = require('express-fileupload');
 var db = require('./config/connection');
 var Handlebars = require('handlebars')
+var session = require('express-session')
 
 var app = express();
 
@@ -28,7 +29,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
-
+app.use(session({secret:"key",cookie:{maxAge:100000}}))
 db.connect((err) =>{
   if(err) console.log('Database Connection Error');
   else console.log('Database Connected to Port: 27017');

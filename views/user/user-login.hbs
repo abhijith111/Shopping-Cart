@@ -1,0 +1,26 @@
+<section>
+    <div class="container">
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <label for="userEmail">Email or Phone</label>
+                <input type="text" class="form-control" name="email" id="userEmail" placeholder="Enter email or phone">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="text" class="form-control" name="password" id="password" placeholder="Enter your password">
+            </div>
+            {{#if loginErrFlag}}
+            <div class="row text-danger">
+                <p class="ml-auto mr-auto">Email or password doesn't exist!</p>
+            </div>
+            {{/if}}
+            <div class="row pl-3 pr-3">
+                <a href="#">Forgot password</a>
+                <a class="ml-auto" href="/signup">Create new account</a>
+            </div>
+            <div class="row pl-3 pr-3 pt-2">
+                <button class="btn btn-primary ml-auto mr-auto" style="width:100%;">Login</button>
+            </div>
+        </form>
+    </div>
+</section>

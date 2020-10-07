@@ -1,0 +1,34 @@
+<section>
+    <div class="container">
+        <div class="row"><h2 class="ml-auto mr-auto">Create New Account</h2></div>
+        <form action="/signup" method="POST">
+            <div class="form-group">
+                <label for="fname">First Name</label>
+                <input type="text" class="form-control" name="fname" id="fname" placeholder="Enter first name">
+            </div>
+            <div class="form-group">
+                <label for="lname">Last Name</label>
+                <input type="text" class="form-control" name="lname" id="lname" placeholder="Enter second name">
+            </div>
+            <div class="form-group">
+                <label for="userName">Username</label>
+                <input type="text" class="form-control" name="userName" id="userName" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label for="email">Email or Phone</label>
+                <input type="text" class="form-control" name="email" id="email" placeholder="Enter email or phone number">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Choose a password">
+            </div>
+            {{!-- <div class="form-group">
+                <input type="password" class="form-control"  id="passwordConfirm" placeholder="Confirm password">                
+            </div> --}}
+            <div class="row"><a class="ml-3" href="/login">Already have an account</a></p></div>
+            <div class="row pl-3 pr-3 pt-2">
+                <button class="btn btn-primary ml-auto mr-auto" style="width:100%;">Signup</button>
+            </div>
+        </form>
+    </div>
+</section>
