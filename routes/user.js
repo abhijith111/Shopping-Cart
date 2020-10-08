@@ -65,6 +65,9 @@ router.get('/cart',varifyLogin,(req,res) => {
   res.render('user/cart');
 })
 
-
+router.get('/add-to-cart/:id',(req,res) => {
+  var id = req.params.id;
+  
+})
 
 module.exports = router;
