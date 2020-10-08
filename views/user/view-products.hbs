@@ -1,23 +1,24 @@
 <section>
-        <div class="container mt-3">
-            <div class="row pt-3">
+    <div class="container mt-3">
+        <div class="row pt-3">
 
-                {{#each products}}
+            {{#each products}}
 
-                <div class="col-md-3">
-                    <div class="card mt-4" style="width: 16rem;">
-                        <img class="card-img-top" height="300rem" width="200rem" src="images/product-images/{{this._id}}.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">{{this.product-name}}</h5>
-                            <p class="card-text">{{this.product-category}}</p>
-                            <p class="card-text">{{this.product-varient}}</p>
-                            <a href="#" class="btn btn-primary">Add to Cart</a>
-                        </div>
+            <div class="col-12 col-sm-3">
+                <div class="card mt-4" style="width: 16rem;">
+                    <img class="card-img-top" height="300rem" width="200rem"
+                        src="images/product-images/{{this._id}}.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.product__name}}</h5>
+                        <p class="card-text">{{this.product__category}}</p>
+                        <p class="card-text">{{this.product__varient}}</p>
+                        <a href="#" class="btn btn-primary">Add to Cart</a>
                     </div>
                 </div>
-
-                {{/each}}
-
             </div>
+
+            {{/each}}
+
         </div>
-    </section>
+    </div>
+</section>
