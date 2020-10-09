@@ -47,6 +47,7 @@ router.post("/login", (req, res) => {
   userHelpers.dologin(req.body).then((response) => {
     if (response.status) {
       req.session.user = response.user;
+      req.session.loggedIn = true;
       //console.log(response.user);
       res.redirect("/");
     } else {
@@ -62,13 +63,13 @@ router.get("/logout", (req, res) => {
 });
 
 router.get('/cart',varifyLogin,(req,res) => {
-  res.render('user/cart');
+  let user = req.session.user;
+  res.render('user/cart',{user});
 })
 
-router.get('/add-to-cart/:id',(req,res) => {
-  console.log("Inside add to cart...\n"+req.session.user._id+"\n"+req.params.id);
-  userHelpers.addToCart(req.session._id,req.params.id).then((response) => {
-    //console.log(response);
+router.get('/add-to-cart/:id',varifyLogin,(req,res) => {
+  userHelpers.addToCart(req.session.user._id,req.params.id).then((response) => {
+    console.log(response);
   })
   res.redirect ('/');
 }) 

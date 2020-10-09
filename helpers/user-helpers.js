@@ -41,32 +41,32 @@ module.exports = {
       }
     });
   },
-  addToCart: (userId, productId) => {
+  addToCart: (uId, pId) => {
     return new Promise(async (resolve, reject) => {
-      db.get()
+      let userExist = await db
+        .get()
         .collection(collection.CART_COLLECTION)
-        .findOne({ userId: objectId(userId) });
-      console.log(userExist);
+        .findOne({ userId: objectId(uId) });
       if (userExist) {
         db.get()
           .collection(collection.CART_COLLECTION)
           .updateOne(
-            { userId: objectId(userId) },
+            { userId: objectId(uId) },
             {
-              $set: {
-                $push: objectId(products),
-              },
+              $push: { products: objectId(pId) },
             }
-          );
+          ).then(() => {
+            resolve("product added to cart of existing user's cart")
+          });
       } else {
         db.get()
           .collection(collection.CART_COLLECTION)
           .insertOne({
-            userId: objectId(userId),
-            products: [objectId(productId)],
+            userId: objectId(uId),
+            products: [objectId(pId)],
           })
-          .then((response) => {
-            resolve(response);
+          .then(() => {
+            resolve("new cart created for the user");
           });
       }
     });
