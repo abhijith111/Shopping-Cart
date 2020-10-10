@@ -64,12 +64,9 @@ router.get("/logout", (req, res) => {
 
 router.get("/cart", varifyLogin, async(req, res) => {
   let user = req.session.user;
-  let allProducts = [];
   let productsInCart = await userHelpers.getProductsInCart(user._id);
-  for (product in productsInCart.products) {
-    allProducts.push(await productHelpers.getProductDetails(productsInCart.products[product]))
-  }
-  res.render("user/cart", { user, allProducts });
+  console.log(productsInCart);
+  res.render("user/cart", { user});
 });
 
 router.get("/add-to-cart/:id", varifyLogin, (req, res) => {
