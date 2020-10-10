@@ -1,6 +1,7 @@
 var db = require("../config/connection");
 var collection = require("../config/collections");
 const bcrypt = require("bcrypt");
+const { response } = require("express");
 var objectId = require("mongodb").ObjectID;
 module.exports = {
   doSignup: (user) => {
@@ -55,8 +56,9 @@ module.exports = {
             {
               $push: { products: objectId(pId) },
             }
-          ).then(() => {
-            resolve("product added to cart of existing user's cart")
+          )
+          .then(() => {
+            resolve("product added to cart of existing user's cart");
           });
       } else {
         db.get()
@@ -69,6 +71,16 @@ module.exports = {
             resolve("new cart created for the user");
           });
       }
+    });
+  },
+  getProductsInCart: (userId) => {
+    return new Promise((resolve, reject) => {
+      db.get()
+        .collection(collection.CART_COLLECTION)
+        .findOne({ userId: objectId(userId) })
+        .then((response) => {
+          resolve(response);
+        });
     });
   },
 };
