@@ -1,9 +1,8 @@
 <section>
     <div class="row">
-        <table>
-            <thead>
-                <th>Product</th>
-            </thead>
-        </table>
+        {{#each allProducts}}
+            {{this.product__name}}
+        {{/each}}
+        
     </div>
 </section>
