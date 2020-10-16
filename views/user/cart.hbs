@@ -1,8 +1,28 @@
-<section>
-    <div class="row">
-        {{#each allProducts}}
-            {{this.product__name}}
-        {{/each}}
-        
-    </div>
+<section class="container mt-5">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Quandity</th>
+                <th scope="col">Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each productsInCart}}
+            <tr>
+                <th scope="row">{{inc @key}}</th>
+                <td >{{this.product__name}}</td>
+                <td>
+                    <a class="btn btn-primary" style="color: white;">-</a>
+                        1
+                    <a class="btn btn-primary" style="color: white;">+</a>
+                </td>
+                <td><img height="auto" width="60px" src="/images/product-images/{{this._id}}.jpg" alt=""></td>
+                <td><a class="btn btn-danger" style="color: white;">Remove</a ></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
 </section>
+

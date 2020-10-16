@@ -13,12 +13,14 @@ const varifyLogin = (req, res, next) => {
   }
 };
 
-/* GET home page. */
-router.get("/", function (req, res, next) {
+router.get("/", async function (req, res, next) {
   let user = req.session.user;
+  let cartCount = null;
+  if (user) {
+    cartCount = await userHelpers.getCartCout(user._id);
+  }
   productHelpers.getAllProducts().then((products) => {
-    res.render("user/view-products", { products, user });
-    //console.log(user);
+    res.render("user/view-products", { products, user, cartCount });
   });
 });
 
@@ -62,20 +64,20 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-router.get("/cart", varifyLogin, async(req, res) => {
+router.get("/cart", varifyLogin, async (req, res) => {
   let user = req.session.user;
   let productsInCart = await userHelpers.getProductsInCart(user._id);
-  console.log(productsInCart);
-  res.render("user/cart", { user});
+  //console.log(productsInCart);
+  res.render("user/cart", { user, productsInCart });
 });
 
-router.get("/add-to-cart/:id", varifyLogin, (req, res) => {
+router.get("/add-to-cart/:id", (req, res) => {
+  console.log("Api call");
   userHelpers
     .addToCart(req.session.user._id, req.params.id)
     .then((response) => {
       console.log(response);
     });
-  res.redirect("/");
 });
 
 module.exports = router;

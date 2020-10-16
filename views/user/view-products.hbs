@@ -12,7 +12,10 @@
                         <h5 class="card-title">{{this.product__name}}</h5>
                         <p class="card-text">{{this.product__category}}</p>
                         <p class="card-text">{{this.product__varient}}</p>
-                        <a href="/add-to-cart/{{this._id}}" class="btn btn-primary">Add to Cart</a>
+                        {{!-- <a href="/add-to-cart/{{this._id}}" class="btn btn-primary">Add to Cart</a> --}}
+                        <button onclick="addToCart('{{this._id}}')" class="btn btn-primary">
+                            add-to-cart
+                        </button>
                     </div>
                 </div>
             </div>

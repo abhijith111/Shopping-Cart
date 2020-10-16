@@ -74,8 +74,9 @@ module.exports = {
     });
   },
   getProductsInCart: (userId) => {
-    return new Promise(async(resolve, reject) => {
-      let cartItems = await db.get()
+    return new Promise(async (resolve, reject) => {
+      let cartItems = await db
+        .get()
         .collection(collection.CART_COLLECTION)
         .aggregate([
           {
@@ -94,11 +95,23 @@ module.exports = {
                   },
                 },
               ],
-              as:'cartItems'
+              as: "cartItems",
             },
           },
-        ]).toArray();
-        resolve(cartItems[0]);
+        ])
+        .toArray();
+      resolve(cartItems[0].cartItems);
+    });
+  },
+  getCartCout: (userId) => {
+    return new Promise(async (resolve, response) => {
+      let cart = await db
+        .get()
+        .collection(collection.CART_COLLECTION)
+        .findOne({ userId: objectId(userId) });
+      if (cart) {
+        resolve(cart.products.length);
+      }
     });
   },
 };
