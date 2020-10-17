@@ -3,7 +3,11 @@ var collection = require("../config/collections");
 const bcrypt = require("bcrypt");
 const { response } = require("express");
 var objectId = require("mongodb").ObjectID;
+
+//export module as product helpers
 module.exports = {
+
+
   doSignup: (user) => {
     return new Promise(async (resolve, reject) => {
       user.password = await bcrypt.hash(user.password, 10);
@@ -16,6 +20,8 @@ module.exports = {
         });
     });
   },
+
+
   dologin: (user) => {
     return new Promise(async (resolve, reject) => {
       let loginStatus = false;
@@ -42,37 +48,49 @@ module.exports = {
       }
     });
   },
+
+
   addToCart: (uId, pId) => {
+    let proObj = {
+      productId: objectId(pId),
+      count: 1
+    }
     return new Promise(async (resolve, reject) => {
-      let userExist = await db
-        .get()
-        .collection(collection.CART_COLLECTION)
-        .findOne({ userId: objectId(uId) });
+      let userExist = await db.get().collection(collection.CART_COLLECTION).findOne({ userId: objectId(uId) });
       if (userExist) {
-        db.get()
-          .collection(collection.CART_COLLECTION)
-          .updateOne(
+        let proExist = userExist.products.findIndex(products => products.productId == pId)
+        if (proExist != -1) {
+          db.get().collection(collection.CART_COLLECTION).updateOne(
+            { 'products.productId': objectId(pId) },
+            {
+              $inc: { 'products.$.count': 1 }
+            }
+          ).then(()=>{
+            resolve();
+          })
+        } else {
+          db.get().collection(collection.CART_COLLECTION).updateOne(
             { userId: objectId(uId) },
             {
-              $push: { products: objectId(pId) },
-            }
-          )
-          .then((response) => {
-            resolve(response);
-          });
+              $push: { products: proObj },
+            }).then((response) => {
+              resolve(response);
+            });
+        }
       } else {
-        db.get()
-          .collection(collection.CART_COLLECTION)
-          .insertOne({
+        db.get().collection(collection.CART_COLLECTION).insertOne(
+          {
             userId: objectId(uId),
-            products: [objectId(pId)],
-          })
-          .then((response) => {
+            products: [proObj]
+          }).then((response) => {
+            console.log("inside user helpers .. tying to add product to fresh cart");
             resolve(response);
           });
       }
     });
   },
+
+
   getProductsInCart: (userId) => {
     return new Promise(async (resolve, reject) => {
       let cartItems = await db
@@ -103,6 +121,8 @@ module.exports = {
       resolve(cartItems[0].cartItems);
     });
   },
+
+
   getCartCout: (userId) => {
     return new Promise(async (resolve, response) => {
       let cart = await db
@@ -111,7 +131,7 @@ module.exports = {
         .findOne({ userId: objectId(userId) });
       if (cart) {
         resolve(cart.products.length);
-      }else{
+      } else {
         resolve(0)
       }
     });
