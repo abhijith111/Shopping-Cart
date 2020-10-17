@@ -57,8 +57,8 @@ module.exports = {
               $push: { products: objectId(pId) },
             }
           )
-          .then(() => {
-            resolve("product added to cart of existing user's cart");
+          .then((response) => {
+            resolve(response);
           });
       } else {
         db.get()
@@ -67,8 +67,8 @@ module.exports = {
             userId: objectId(uId),
             products: [objectId(pId)],
           })
-          .then(() => {
-            resolve("new cart created for the user");
+          .then((response) => {
+            resolve(response);
           });
       }
     });
@@ -111,6 +111,8 @@ module.exports = {
         .findOne({ userId: objectId(userId) });
       if (cart) {
         resolve(cart.products.length);
+      }else{
+        resolve(0)
       }
     });
   },

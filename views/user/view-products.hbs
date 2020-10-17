@@ -1,6 +1,7 @@
 <section>
     <div class="container mt-3">
         <div class="row pt-3">
+            
 
             {{#each products}}
 
@@ -13,7 +14,7 @@
                         <p class="card-text">{{this.product__category}}</p>
                         <p class="card-text">{{this.product__varient}}</p>
                         {{!-- <a href="/add-to-cart/{{this._id}}" class="btn btn-primary">Add to Cart</a> --}}
-                        <button onclick="addToCart('{{this._id}}')" class="btn btn-primary">
+                        <button onclick="addToCart('{{this._id}}','{{../user}}')" class="btn btn-primary">
                             add-to-cart
                         </button>
                     </div>

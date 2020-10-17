@@ -71,12 +71,12 @@ router.get("/cart", varifyLogin, async (req, res) => {
   res.render("user/cart", { user, productsInCart });
 });
 
-router.get("/add-to-cart/:id", (req, res) => {
+router.get("/add-to-cart/:id",varifyLogin, (req, res) => {
   console.log("Api call");
   userHelpers
     .addToCart(req.session.user._id, req.params.id)
     .then((response) => {
-      console.log(response);
+      res.json(response);
     });
 });
 
