@@ -67,7 +67,7 @@ router.get("/logout", (req, res) => {
 router.get("/cart", varifyLogin, async (req, res) => {
   let user = req.session.user;
   let productsInCart = await userHelpers.getProductsInCart(user._id);
-  console.log(productsInCart);
+  //console.log(productsInCart);
   res.render("user/cart", { user, productsInCart });
 });
 
@@ -79,5 +79,11 @@ router.get("/add-to-cart/:id",varifyLogin, (req, res) => {
       res.json(response);
     });
 });
+
+router.post('/change-product-count',(req,res,next) => {
+  userHelpers.changeCartCount(req.body).then((response)=>{
+    console.log(response);
+  })
+})
 
 module.exports = router;

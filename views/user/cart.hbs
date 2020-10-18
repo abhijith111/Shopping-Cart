@@ -17,9 +17,9 @@
                 <td><img height="auto" width="60px" src="/images/product-images/{{this._id}}.jpg" alt=""></td>
                 {{/each}}
                 <td>
-                    <a class="btn btn-primary" style="color: white;">-</a>
+                    <a class="btn btn-primary" onclick="changeProductCount('{{this.productId}}','{{this.userId}}',-1)" style="color: white;">-</a>
                     {{this.count}}
-                    <a class="btn btn-primary" onclick="addToCart('{{this.productId}}','{{../user}}')" style="color: white;">+</a>
+                    <a class="btn btn-primary" onclick="changeProductCount('{{this.productId}}','{{this.userId}}',1)" style="color: white;">+</a>
                 </td>
                 <td><a class="btn btn-danger" style="color: white;">Remove</a></td>
             </tr>
