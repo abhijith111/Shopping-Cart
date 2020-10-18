@@ -101,24 +101,24 @@ module.exports = {
             $match: { userId: objectId(userId) },
           },
           {
-            $lookup: {
-              from: collection.PRODUCT_COLLECTION,
-              let: { productList: "$products" },
-              pipeline: [
-                {
-                  $match: {
-                    $expr: {
-                      $in: ["$_id", "$$productList"],
-                    },
-                  },
-                },
-              ],
-              as: "cartItems",
-            },
+            $unwind: '$products'
           },
+          {
+            $project: {
+              productId:'$products.productId',
+              count:'$products.count'
+            }
+          },{
+            $lookup:{
+              from:collection.PRODUCT_COLLECTION,
+              localField:'productId',
+              foreignField:'_id',
+              as:'products'
+            }
+          }
         ])
         .toArray();
-      resolve(cartItems[0].cartItems);
+      resolve(cartItems);
     });
   },
 

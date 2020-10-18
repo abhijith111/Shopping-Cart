@@ -12,17 +12,18 @@
             {{#each productsInCart}}
             <tr>
                 <th scope="row">{{inc @key}}</th>
-                <td >{{this.product__name}}</td>
+                {{#each products}}
+                <td>{{this.product__name}}</td>
+                <td><img height="auto" width="60px" src="/images/product-images/{{this._id}}.jpg" alt=""></td>
+                {{/each}}
                 <td>
                     <a class="btn btn-primary" style="color: white;">-</a>
-                        1
+                    {{this.count}}
                     <a class="btn btn-primary" style="color: white;">+</a>
                 </td>
-                <td><img height="auto" width="60px" src="/images/product-images/{{this._id}}.jpg" alt=""></td>
-                <td><a class="btn btn-danger" style="color: white;">Remove</a ></td>
+                <td><a class="btn btn-danger" style="color: white;">Remove</a></td>
             </tr>
             {{/each}}
         </tbody>
     </table>
 </section>
-

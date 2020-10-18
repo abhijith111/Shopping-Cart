@@ -67,7 +67,6 @@ router.get("/logout", (req, res) => {
 router.get("/cart", varifyLogin, async (req, res) => {
   let user = req.session.user;
   let productsInCart = await userHelpers.getProductsInCart(user._id);
-  //console.log(productsInCart);
   res.render("user/cart", { user, productsInCart });
 });
 
