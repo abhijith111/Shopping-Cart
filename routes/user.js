@@ -83,7 +83,6 @@ router.get("/add-to-cart/:id",varifyLogin, (req, res) => {
 router.post('/change-product-count',(req,res,next) => {
   userHelpers.changeCartCount(req.body).then((response)=>{
     res.json(response);
-    console.log(response);
   })
 })
 

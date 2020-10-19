@@ -4,8 +4,8 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Product Name</th>
-                <th scope="col">Quandity</th>
                 <th scope="col">Image</th>
+                <th scope="col" colspan="2">Quandity</th>
             </tr>
         </thead>
         <tbody>
@@ -16,14 +16,16 @@
                 <td>{{this.product__name}}</td>
                 <td><img height="auto" width="60px" src="/images/product-images/{{this._id}}.jpg" alt=""></td>
                 {{/each}}
-                <td>
+                <td colspan="2">
 
 
-                    <a class="btn btn-primary" onclick="changeProductCount('{{this.productId}}','{{this.userId}}',-1)"
-                        style="color: white;">-</a>
-                    {{this.count}}
-                    <a class="btn btn-primary" onclick="changeProductCount('{{this.productId}}','{{this.userId}}',1)"
-                        style="color: white;">+</a>
+                    <button style="float: left;" class="btn btn-primary"
+                        onclick="changeProductCount('{{this.productId}}','{{this.userId}}',-1)">-</button>
+
+                    <p style="float: left;" class="text-center" id="{{this.productId}}">{{this.count}}</p>
+
+                    <button style="float: left;" class="btn btn-primary mr-auto"
+                        onclick="changeProductCount('{{this.productId}}','{{this.userId}}',1)">+</button>
 
 
                 </td>

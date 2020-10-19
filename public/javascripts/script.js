@@ -23,7 +23,7 @@ function changeProductCount(proId, user, opp) {
         },
         method: "post",
         success: (response) => {
-            //console.log(response);
+            document.getElementById(response.productId).innerHTML = response.count;
         }
     })
 }

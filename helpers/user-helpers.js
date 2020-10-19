@@ -168,14 +168,16 @@ module.exports = {
                     }
                 )
                 .then(() => {
-                    
+                    db.get().collection(collection.CART_COLLECTION).findOne({
+                        userId: objectId(obj.userId),
+                        "products.productId": objectId(obj.productId)
+                    }).then((response) => {
+                        resolve(response.products.find(products => products.productId == obj.productId));
+                    })
                 });
         });
     },
 };
-// {
-//   productId: '5f7e996b617953155d2a350c',
-//   userId: '5f7a179198584356231ecd9c',
-//   count: '1'
-// }
-// $inc: { "products.$.count": 1 }
+// let proExist = userExist.products.findIndex((products) => products.productId == pId);
+
+// array1.find(element => element > 10);
