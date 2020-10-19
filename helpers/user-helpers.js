@@ -66,7 +66,10 @@ module.exports = {
                     db.get()
                         .collection(collection.CART_COLLECTION)
                         .updateOne(
-                            { "products.productId": objectId(pId) },
+                            {
+                                userId: objectId(uId),
+                                "products.productId": objectId(pId),
+                            },
                             {
                                 $inc: { "products.$.count": 1 },
                             }
@@ -151,13 +154,22 @@ module.exports = {
         });
     },
     changeCartCount: (obj) => {
-        return new Promise((reslove,reject) => {
-          let changeValue = parseInt(obj.count);
-          db.get().collection(collection.CART_COLLECTION).updateOne(
-            {'products.productId':objectId(obj.productId)},
-            {
-            $inc: {'products.$.count':changeValue}
-            }).then(()=>{})
+        return new Promise((resolve, reject) => {
+            let changeValue = parseInt(obj.count);
+            db.get()
+                .collection(collection.CART_COLLECTION)
+                .updateOne(
+                    {
+                        userId: objectId(obj.userId),
+                        "products.productId": objectId(obj.productId),
+                    },
+                    {
+                        $inc: { "products.$.count": changeValue },
+                    }
+                )
+                .then(() => {
+                    
+                });
         });
     },
 };

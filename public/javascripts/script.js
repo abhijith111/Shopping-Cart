@@ -5,7 +5,7 @@ function addToCart(productId, user) {
             url: "/add-to-cart/" + productId,
             method: "get",
             success: function (response) {
-                console.log("ajax call success ... :)");
+                //console.log(response);
             },
         });
     } else {
@@ -22,8 +22,8 @@ function changeProductCount(proId, user, opp) {
             count: opp
         },
         method: "post",
-        success: () => {
-
+        success: (response) => {
+            //console.log(response);
         }
     })
 }
