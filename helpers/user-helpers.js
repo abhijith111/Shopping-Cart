@@ -75,7 +75,7 @@ module.exports = {
                             }
                         )
                         .then(() => {
-                            resolve();
+                            resolve(true);
                         });
                 } else {
                     db.get()
@@ -86,8 +86,8 @@ module.exports = {
                                 $push: { products: proObj },
                             }
                         )
-                        .then((response) => {
-                            resolve(response);
+                        .then(() => {
+                            resolve(true);
                         });
                 }
             } else {
@@ -97,11 +97,11 @@ module.exports = {
                         userId: objectId(uId),
                         products: [proObj],
                     })
-                    .then((response) => {
+                    .then(() => {
                         console.log(
                             "inside user helpers .. tying to add product to fresh cart"
                         );
-                        resolve(response);
+                        resolve(true);
                     });
             }
         });
@@ -140,8 +140,8 @@ module.exports = {
         });
     },
 
-    getCartCout: (userId) => {
-        return new Promise(async (resolve, response) => {
+    getCartCount: (userId) => {
+        return new Promise(async (resolve, reject) => {
             let cart = await db
                 .get()
                 .collection(collection.CART_COLLECTION)
@@ -155,29 +155,71 @@ module.exports = {
     },
     changeCartCount: (obj) => {
         return new Promise((resolve, reject) => {
-            let changeValue = parseInt(obj.count);
+            obj.count = parseInt(obj.count);
+            obj.opp = parseInt(obj.opp);
+            if (obj.count == 1 && obj.opp == -1) {
+                db.get()
+                    .collection(collection.CART_COLLECTION)
+                    .updateOne(
+                        {
+                            userId: objectId(obj.userId),
+                            "products.productId": objectId(obj.productId),
+                        },
+                        {
+                            $pull: {
+                                products: {
+                                    productId: objectId(obj.productId),
+                                },
+                            },
+                        }
+                    )
+                    .then(() => {
+                        resolve({ itemRemoved: true });
+                    });
+            } else {
+                db.get()
+                    .collection(collection.CART_COLLECTION)
+                    .updateOne(
+                        {
+                            userId: objectId(obj.userId),
+                            "products.productId": objectId(obj.productId),
+                        },
+                        {
+                            $inc: { "products.$.count": obj.opp },
+                        }
+                    )
+                    .then(() => {
+                        let newCount = obj.count + obj.opp;
+                        resolve({ itemRemoved: false, count: newCount });
+                    });
+            }
+        });
+    },
+    removeProduct: (req) => {
+        return new Promise((resolve, reject) => {
             db.get()
                 .collection(collection.CART_COLLECTION)
                 .updateOne(
                     {
-                        userId: objectId(obj.userId),
-                        "products.productId": objectId(obj.productId),
+                        userId: objectId(req.userId),
+                        "products.productId": objectId(req.productId),
                     },
                     {
-                        $inc: { "products.$.count": changeValue },
+                        $pull: {
+                            products: {
+                                productId: objectId(req.productId),
+                            },
+                        },
                     }
                 )
                 .then(() => {
-                    db.get().collection(collection.CART_COLLECTION).findOne({
-                        userId: objectId(obj.userId),
-                        "products.productId": objectId(obj.productId)
-                    }).then((response) => {
-                        resolve(response.products.find(products => products.productId == obj.productId));
-                    })
+                    resolve({itemRemoveFlag: true})
                 });
         });
     },
 };
-// let proExist = userExist.products.findIndex((products) => products.productId == pId);
 
-// array1.find(element => element > 10);
+// {
+//     productId: '5f7e9843ccf21c117dfa0411',
+//     userId: '5f7a179198584356231ecd9c'
+//   }
