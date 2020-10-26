@@ -2,8 +2,9 @@
     <table class="table table-borderless">
         <thead>
             <tr>
-                <th scope="col">#</th>
+                <th scope="col">No</th>
                 <th scope="col">Product Name</th>
+                <th scope="col">Price</th>
                 <th scope="col">Image</th>
                 <th scope="col" >Quandity</th>
             </tr>
@@ -14,6 +15,7 @@
                 <th scope="row">{{inc @key}}</th>
                 {{#each products}}
                 <td>{{this.product__name}}</td>
+                <td>{{this.product__price}}</td>
                 <td><img height="auto" width="60px" src="/images/product-images/{{this._id}}.jpg" alt=""></td>
                 {{/each}}
                 <td>
@@ -33,9 +35,22 @@
                     <button class="btn btn-danger" onclick="removeProduct('{{this.productId}}','{{this.userId}}')">
                         Remove
                     </button>
-                    {{!-- <a class="btn btn-danger" style="color: white;">Remove</a></td> --}}
             </tr>
             {{/each}}
         </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <div style="width: 100%;">
+                <div class="card">
+                    <div class="card-body ml-auto mr-auto font-weight-bold">
+                         Total :
+                        <span id="totalAmount"> 0 </span>
+                    </div>
+                </div>
+            </div>
+            </tr>
+        </thead>
     </table>
 </section>

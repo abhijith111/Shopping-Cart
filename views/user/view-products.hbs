@@ -1,19 +1,18 @@
 <section>
     <div class="container mt-3">
         <div class="row pt-3">
-            
+
 
             {{#each products}}
 
             <div class="col-12 col-sm-3">
                 <div class="card mt-4" style="width: 16rem;">
-                    <img class="card-img-top" height="300rem" width="200rem"
-                        src="images/product-images/{{this._id}}.jpg" alt="Card image cap">
+                    <img class="card-img-top" height="auto" width="200rem" src="images/product-images/{{this._id}}.jpg"
+                        alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{this.product__name}}</h5>
                         <p class="card-text">{{this.product__category}}</p>
-                        <p class="card-text">{{this.product__varient}}</p>
-                        {{!-- <a href="/add-to-cart/{{this._id}}" class="btn btn-primary">Add to Cart</a> --}}
+                        <p class="card-text text-success"><span>Price: </span> {{this.product__price}}</p>
                         <button onclick="addToCart('{{this._id}}','{{../user}}')" class="btn btn-primary">
                             add-to-cart
                         </button>
