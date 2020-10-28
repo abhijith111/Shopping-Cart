@@ -4,8 +4,10 @@ function addToCart(productId, user) {
             url: "/add-to-cart/" + productId,
             method: "get",
             success: function (response) {
-                if(response){
-                    document.getElementById('navBarCartCount').innerHTML = response
+                if (response) {
+                    document.getElementById(
+                        "navBarCartCount"
+                    ).innerHTML = response;
                 }
             },
         });
@@ -31,26 +33,27 @@ function changeProductCount(proId, user, opp) {
                 location.reload();
             } else {
                 document.getElementById(proId).innerHTML = response.count;
+                document.getElementById("totalAmount").innerHTML =
+                    response.totalAmount;
             }
         },
     });
 }
 
-function removeProduct(proId,userId){
+function removeProduct(proId, userId) {
     let confirmFlag = confirm("you want to delete this item ?");
-    if (confirmFlag){
+    if (confirmFlag) {
         $.ajax({
-            url:"/remove-product/",
+            url: "/remove-product/",
             data: {
                 productId: proId,
                 userId: userId,
             },
             method: "post",
             success: (response) => {
-                    location.reload();
-            }
-        })
-        
+                location.reload();
+            },
+        });
     }
 }
 

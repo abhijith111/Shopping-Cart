@@ -67,32 +67,45 @@ router.get("/logout", (req, res) => {
 router.get("/cart", varifyLogin, async (req, res) => {
     let user = req.session.user;
     let productsInCart = await userHelpers.getProductsInCart(user._id);
+    let total = 0
+    total = await userHelpers.getTotalAmount(user._id);
     //console.log(productsInCart);
-    res.render("user/cart", { user, productsInCart });
+    res.render("user/cart", { user, productsInCart, total });
 });
 
 router.get("/add-to-cart/:id", varifyLogin, (req, res) => {
     // console.log("Api call");
-    userHelpers
-        .addToCart(req.session.user._id, req.params.id)
-        .then(() => {
-            userHelpers.getCartCount(req.session.user._id).then((response) => {
-                res.json(response);
-                console.log(response);
-            });
+    userHelpers.addToCart(req.session.user._id, req.params.id).then(() => {
+        userHelpers.getCartCount(req.session.user._id).then((response) => {
+            res.json(response);
+            console.log(response);
         });
+    });
 });
 
 router.post("/change-product-count", (req, res, next) => {
-    userHelpers.changeCartCount(req.body).then((response) => {
+    userHelpers.changeCartCount(req.body).then(async(response) => {
         // console.log(response);
+        let total = await userHelpers.getTotalAmount(req.body.userId);
+        response.totalAmount = total;
         res.json(response);
     });
 });
 
-router.post("/remove-product",(req,res) => {
+router.post("/remove-product", (req, res) => {
     userHelpers.removeProduct(req.body).then((response) => {
         res.json(response);
+    });
+});
+router.get("/orders",varifyLogin,async(req,res)=>{
+    let totalAmount = await userHelpers.getTotalAmount(req.session.user._id);
+    res.render('user/orders', {user: req.session.user,totalAmount});
+})
+router.post('/orders',varifyLogin,async (req,res)=> {
+    let totalAmount = await userHelpers.getTotalAmount(req.body.userId);
+    userHelpers.placeOrder(req.body,totalAmount).then((response)=> {
+        res.json(response)
     })
+    //console.log(req.body);
 })
 module.exports = router;
