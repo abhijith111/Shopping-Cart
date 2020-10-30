@@ -29,7 +29,7 @@
                             placeholder="Enter contact number">
                             <input type="text" name="userId" value="{{user._id}}" hidden>
                         <button type="submit" class="btn btn-success mt-4">
-                            <a href="/order-success" class="text-white">Place Order</a>
+                            Place Order
                         </button>
                     </form>
                 </div>
@@ -43,18 +43,3 @@
     </div>
 
 </section>
-<script>
-    $("#checkout__form").submit((e) => {
-        e.preventDefault();
-        $.ajax({
-            url: "/orders/",
-            method: "POST",
-            data: $("#checkout__form").serialize(),
-            success: (response) => {
-                console.log(response);
-                target.redirect('/order-success')
-            },
-        });
-    });
-
-</script>

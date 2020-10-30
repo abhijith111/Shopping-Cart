@@ -8,31 +8,22 @@
                     <th scope="col">Delivery Address</th>
                     <th scope="col">Phone Number</th>
                     <th scope="col">Total Amount</th>
+                    <th scope="col">Date Ordered</th>
                 </tr>
             </thead>
             <tbody>
+                {{#each orderDetails}}
                 <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                    <th>1</th>
+                    <td>{{this.deliveryDetails.address}}</td>
+                    <td>{{this.deliveryDetails.phno}}</td>
+                    <td>{{this.total}}</td>
+                    <td>{{this.date}}</td>
                     <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Products
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <table>
-                                    <tr>
-                                        <td><img style="width: 3rem; height: auto;" src="/images/product-images/5f95327d9d4d42184d7ed29c.jpg" alt=""></td>
-                                        <td>x 3</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+                        <a href="/show-product" class="btn btn-primary">Products</a>
                     </td>
                 </tr>
+                {{/each}}
             </tbody>
         </table>
     </div>

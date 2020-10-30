@@ -297,85 +297,26 @@ module.exports = {
                     db.get()
                         .collection(collection.ORDER_COLECTION)
                         .insertOne(orderObject)
-                        .then((response) => {
-                            console.log(response);
+                        .then((insertObject) => {
                             db.get()
                                 .collection(collection.CART_COLLECTION)
-                                .removeOne({ userId: objectId(obj.userId) });
-                            resolve(true);
+                                .removeOne({ userId: objectId(obj.userId) }).then(()=>{
+                                    resolve(insertObject)
+                                });
                         });
                 });
         });
     },
     getOrderDetails: (userId) => {
-        return new Promise((resolve,reject)=> {
-            db.get().collection(collection.ORDER_COLECTION).aggregate([
-                {
-                    $match:{userId:objectId(userId)},
-                },
-                {
-                    $unwind:"$products"
-                },
-            ]).toArray().then((response) => {
-                resolve(response);
-            })
-        })
+        return new Promise((resolve, reject) => {
+            db.get()
+                .collection(collection.ORDER_COLECTION)
+                .find({
+                    userId: objectId(userId),
+                }).toArray()
+                .then((response) => {
+                    resolve(response);
+                });
+        });
     },
 };
-
-// getTotalAmount: (userId) => {
-//     return new Promise((reslove, reject) => {
-//         db.get()
-//             .collection(collection.CART_COLLECTION)
-//             .aggregate([
-//                 {
-//                     $match: { userId: objectId(userId) },
-//                 },
-//                 {
-//                     $unwind: "$products",
-//                 },
-//                 {
-//                     $project: {
-//                         userId: "$userId",
-//                         productId: "$products.productId",
-//                         count: "$products.count",
-//                     },
-//                 },
-//                 {
-//                     $lookup: {
-//                         from: collection.PRODUCT_COLLECTION,
-//                         localField: "productId",
-//                         foreignField: "_id",
-//                         as: "products",
-//                     },
-//                 },
-//                 {
-//                     $project: {
-//                         userId: 1,
-//                         count: 1,
-//                         products: { $arrayElemAt: ["$products", 0] },
-//                     },
-//                 },
-//                 {
-//                     $group: {
-//                         _id: null,
-//                         total: {
-//                             $sum: {
-//                                 $multiply: [
-//                                     "$count",
-//                                     { $toInt: "$products.product__price" },
-//                                 ],
-//                             },
-//                         },
-//                     },
-//                 },
-//             ])
-//             .toArray()
-//             .then((response) => {
-//                 reslove(response[0].total);
-//             })
-//             .catch((err) => {
-//                 reslove(null);
-//             });
-//     });
-// }

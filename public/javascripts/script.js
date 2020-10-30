@@ -57,3 +57,14 @@ function removeProduct(proId, userId) {
     }
 }
 
+$("#checkout__form").submit((e) => {
+    e.preventDefault();
+    $.ajax({
+        url: "/orders/",
+        method: "POST",
+        data: $("#checkout__form").serialize(),
+        success: (response) => {
+            location.href='/order-success/'
+        },
+    });
+});

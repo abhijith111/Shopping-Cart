@@ -109,14 +109,25 @@ router.post("/orders", varifyLogin, async (req, res) => {
     //console.log(req.body);
 });
 
-router.get("/order-success", (req, res) => {
-    res.render('user/order-success');
+router.get("/order-success", varifyLogin, (req, res) => {
+    res.render("user/order-success", { user: req.session.user });
 });
 
-router.get('/order-summary',varifyLogin,(req,res)=> {
-    userHelpers.getOrderDetails(req.session.user._id).then((response)=> {
-        console.log(response);
-        res.render('user/order-summary',{user:req.session.user,})
-    })
-})
+router.get("/order-summary", varifyLogin, (req, res) => {
+    userHelpers.getOrderDetails(req.session.user._id).then((orderDetails) => {
+        for (dateValue in orderDetails) {
+            orderDetails[dateValue].date =
+                orderDetails[dateValue].date.getDate() +
+                "-" +
+                (parseInt(orderDetails[dateValue].date.getMonth()) + 1) +
+                "-" +
+                orderDetails[dateValue].date.getFullYear();
+        }
+        console.log(orderDetails);
+        res.render("user/order-summary", {
+            user: req.session.user,
+            orderDetails,
+        });
+    });
+});
 module.exports = router;
