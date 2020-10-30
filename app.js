@@ -1,3 +1,5 @@
+
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -32,7 +34,7 @@ app.use(fileUpload());
 app.use(session({secret:"key",cookie:{maxAge:Infinity}}))
 db.connect((err) =>{
   if(err) console.log('Database Connection Error');
-  else console.log('Database Connected to Port: 27017');
+  else console.log('Database Connected Atlas MongoDB');
 });
 app.use('/admin', adminRouter);
 app.use('/', userRouter);
