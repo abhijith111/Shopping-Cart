@@ -1,5 +1,7 @@
 <section>
     <div class="container">
+        {{#if totalAmount}}
+
         <div class="card">
             <h2 class="mr-auto ml-auto mt-5">Order Summary</h3>
                 <div class="ml-5 mr-5 mb-5">
@@ -7,15 +9,15 @@
 
                         <h4 class="mt-5">Total amount: <span class="text-success">{{totalAmount}}</span> </h4>
                         <h4 class="mt-3">Choose Payment Method</h4>
-                        <input type="radio" value="cod" checked name="payMode" id="paySelect">
+                        <input type="radio" value="cod" checked name="payMode" id="payMode">
                         <label class="form-check-label" for="paySelect">
                             Cash On Delivery
                         </label>
                         <br>
-                        <input type="radio" value="gpay" checked name="payMode" id="paySelect">
-                        <label for="paySelect">
+                        <input type="radio" value="gpay" name="payMode" id="payMode">
+                        <label class="form-check-label" for="paySelect">
                             Google Pay
-                        </label>
+                        </label><br>
                         <label>Address </label>
                         <input type="text" class="form-control" id="address" name="address"
                             value="koyikkanjalil House Thrikkakara po Mundampalam" placeholder="Enter address">
@@ -26,12 +28,18 @@
                         <input type="number" class="form-control" name="phno" value="7012849522" id="phno"
                             placeholder="Enter contact number">
                             <input type="text" name="userId" value="{{user._id}}" hidden>
-                        <button type="submit" class="btn btn-success ">
-                            Place Order
+                        <button type="submit" class="btn btn-success mt-4">
+                            <a href="/order-success" class="text-white">Place Order</a>
                         </button>
                     </form>
                 </div>
         </div>
+
+        {{else}}
+
+        <p>No orders!</p>
+
+        {{/if}}
     </div>
 
 </section>
@@ -44,6 +52,7 @@
             data: $("#checkout__form").serialize(),
             success: (response) => {
                 console.log(response);
+                target.redirect('/order-success')
             },
         });
     });

@@ -1,3 +1,5 @@
+{{#if total}}
+
 <section class="container mt-5">
     <table class="table table-borderless">
         <thead>
@@ -57,3 +59,14 @@
         </thead>
     </table>
 </section>
+
+{{else}}
+
+<section>
+    <div class="container text-center pt-5 col-md-4">
+        <h2>Your cart is empty! </h2><br>
+        <a href="/" class="btn btn-primary">Shop Now</a>
+    </div>
+</section>
+
+{{/if}}

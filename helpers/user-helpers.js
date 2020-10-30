@@ -241,52 +241,141 @@ module.exports = {
                         },
                     },
                     {
-                        $project:{
-                            userId:1,count:1,products:{$arrayElemAt:['$products',0]}
-                        }
+                        $project: {
+                            userId: 1,
+                            count: 1,
+                            products: { $arrayElemAt: ["$products", 0] },
+                        },
                     },
                     {
-                        $group:{
-                            _id:null,
-                            total:{
-                                $sum:{$multiply:['$count',{$toInt :'$products.product__price'}]}
-                            }
-                        }
-                    }
+                        $group: {
+                            _id: null,
+                            total: {
+                                $sum: {
+                                    $multiply: [
+                                        "$count",
+                                        { $toInt: "$products.product__price" },
+                                    ],
+                                },
+                            },
+                        },
+                    },
                 ])
                 .toArray()
                 .then((response) => {
                     reslove(response[0].total);
-                }).catch((err) => {
-                    console.log(err);
+                })
+                .catch((err) => {
+                    reslove(null);
                 });
         });
     },
-    placeOrder: (obj,TotalAmount)=> {
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.CART_COLLECTION).findOne({userId:objectId(obj.userId)}).then((response)=> {
-                console.log(obj);
-                console.log(response);
-                let payStatus = obj.payMode === 'cod'?'cod__pay':'online__pending'
-                console.log(payStatus);
-                let orderObject ={
-                    userId:objectId(obj.userId),
-                    deliveryDetails:{
-                        address: obj.address,
-                        pincode:obj.pincode,
-                        phno:obj.phno,
-                    },
-                    total:TotalAmount,
-                    payMode:obj.payMode,
-                    products:response.products,
-                    payStatus:payStatus,
-                    date:new Date,
-                }
-                db.get().collection(collection.ORDER_COLECTION).insertOne(orderObject).then((response)=>{
-                    db.get().collection(collection.CART_COLLECTION).removeOne({userId:objectId(obj.userId)});
-                    resolve(true)
-                })
+    placeOrder: (obj, TotalAmount) => {
+        return new Promise((resolve, reject) => {
+            db.get()
+                .collection(collection.CART_COLLECTION)
+                .findOne({ userId: objectId(obj.userId) })
+                .then((response) => {
+                    console.log(obj);
+                    console.log(response);
+                    let payStatus =
+                        obj.payMode === "cod" ? "cod__pay" : "online__pending";
+                    console.log(payStatus);
+                    let orderObject = {
+                        userId: objectId(obj.userId),
+                        deliveryDetails: {
+                            address: obj.address,
+                            pincode: obj.pincode,
+                            phno: obj.phno,
+                        },
+                        total: TotalAmount,
+                        payMode: obj.payMode,
+                        products: response.products,
+                        payStatus: payStatus,
+                        date: new Date(),
+                    };
+                    db.get()
+                        .collection(collection.ORDER_COLECTION)
+                        .insertOne(orderObject)
+                        .then((response) => {
+                            console.log(response);
+                            db.get()
+                                .collection(collection.CART_COLLECTION)
+                                .removeOne({ userId: objectId(obj.userId) });
+                            resolve(true);
+                        });
+                });
+        });
+    },
+    getOrderDetails: (userId) => {
+        return new Promise((resolve,reject)=> {
+            db.get().collection(collection.ORDER_COLECTION).aggregate([
+                {
+                    $match:{userId:objectId(userId)},
+                },
+                {
+                    $unwind:"$products"
+                },
+            ]).toArray().then((response) => {
+                resolve(response);
             })
         })
-    }
+    },
 };
+
+// getTotalAmount: (userId) => {
+//     return new Promise((reslove, reject) => {
+//         db.get()
+//             .collection(collection.CART_COLLECTION)
+//             .aggregate([
+//                 {
+//                     $match: { userId: objectId(userId) },
+//                 },
+//                 {
+//                     $unwind: "$products",
+//                 },
+//                 {
+//                     $project: {
+//                         userId: "$userId",
+//                         productId: "$products.productId",
+//                         count: "$products.count",
+//                     },
+//                 },
+//                 {
+//                     $lookup: {
+//                         from: collection.PRODUCT_COLLECTION,
+//                         localField: "productId",
+//                         foreignField: "_id",
+//                         as: "products",
+//                     },
+//                 },
+//                 {
+//                     $project: {
+//                         userId: 1,
+//                         count: 1,
+//                         products: { $arrayElemAt: ["$products", 0] },
+//                     },
+//                 },
+//                 {
+//                     $group: {
+//                         _id: null,
+//                         total: {
+//                             $sum: {
+//                                 $multiply: [
+//                                     "$count",
+//                                     { $toInt: "$products.product__price" },
+//                                 ],
+//                             },
+//                         },
+//                     },
+//                 },
+//             ])
+//             .toArray()
+//             .then((response) => {
+//                 reslove(response[0].total);
+//             })
+//             .catch((err) => {
+//                 reslove(null);
+//             });
+//     });
+// }

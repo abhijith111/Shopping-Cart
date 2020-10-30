@@ -67,8 +67,7 @@ router.get("/logout", (req, res) => {
 router.get("/cart", varifyLogin, async (req, res) => {
     let user = req.session.user;
     let productsInCart = await userHelpers.getProductsInCart(user._id);
-    let total = 0
-    total = await userHelpers.getTotalAmount(user._id);
+    let total = await userHelpers.getTotalAmount(user._id);
     //console.log(productsInCart);
     res.render("user/cart", { user, productsInCart, total });
 });
@@ -84,7 +83,7 @@ router.get("/add-to-cart/:id", varifyLogin, (req, res) => {
 });
 
 router.post("/change-product-count", (req, res, next) => {
-    userHelpers.changeCartCount(req.body).then(async(response) => {
+    userHelpers.changeCartCount(req.body).then(async (response) => {
         // console.log(response);
         let total = await userHelpers.getTotalAmount(req.body.userId);
         response.totalAmount = total;
@@ -97,15 +96,27 @@ router.post("/remove-product", (req, res) => {
         res.json(response);
     });
 });
-router.get("/orders",varifyLogin,async(req,res)=>{
+router.get("/orders", varifyLogin, async (req, res) => {
     let totalAmount = await userHelpers.getTotalAmount(req.session.user._id);
-    res.render('user/orders', {user: req.session.user,totalAmount});
-})
-router.post('/orders',varifyLogin,async (req,res)=> {
+    res.render("user/orders", { user: req.session.user, totalAmount });
+});
+router.post("/orders", varifyLogin, async (req, res) => {
+    console.log(req.body);
     let totalAmount = await userHelpers.getTotalAmount(req.body.userId);
-    userHelpers.placeOrder(req.body,totalAmount).then((response)=> {
-        res.json(response)
-    })
+    userHelpers.placeOrder(req.body, totalAmount).then((response) => {
+        res.json(response);
+    });
     //console.log(req.body);
+});
+
+router.get("/order-success", (req, res) => {
+    res.render('user/order-success');
+});
+
+router.get('/order-summary',varifyLogin,(req,res)=> {
+    userHelpers.getOrderDetails(req.session.user._id).then((response)=> {
+        console.log(response);
+        res.render('user/order-summary',{user:req.session.user,})
+    })
 })
 module.exports = router;
