@@ -144,8 +144,7 @@ module.exports = {
                 .collection(collection.CART_COLLECTION)
                 .findOne({ userId: objectId(userId) });
             if (cart) {
-                console.log(cart);
-                resolve({count: cart.products.length,cart});
+                resolve(cart.products.length);
             } else {
                 resolve(0);
             }
