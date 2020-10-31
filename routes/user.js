@@ -76,8 +76,8 @@ router.get("/add-to-cart/:id", varifyLogin, (req, res) => {
     // console.log("Api call");
     userHelpers.addToCart(req.session.user._id, req.params.id).then(() => {
         userHelpers.getCartCount(req.session.user._id).then((response) => {
-            res.json(response);
             console.log(response);
+            res.json(response);
         });
     });
 });
@@ -101,7 +101,7 @@ router.get("/orders", varifyLogin, async (req, res) => {
     res.render("user/orders", { user: req.session.user, totalAmount });
 });
 router.post("/orders", varifyLogin, async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     let totalAmount = await userHelpers.getTotalAmount(req.body.userId);
     userHelpers.placeOrder(req.body, totalAmount).then((response) => {
         res.json(response);
@@ -123,7 +123,7 @@ router.get("/order-summary", varifyLogin, (req, res) => {
                 "-" +
                 orderDetails[dateValue].date.getFullYear();
         }
-        console.log(orderDetails);
+        //console.log(orderDetails);
         res.render("user/order-summary", {
             user: req.session.user,
             orderDetails,

@@ -144,7 +144,8 @@ module.exports = {
                 .collection(collection.CART_COLLECTION)
                 .findOne({ userId: objectId(userId) });
             if (cart) {
-                resolve(cart.products.length);
+                console.log(cart);
+                resolve({count: cart.products.length,cart});
             } else {
                 resolve(0);
             }
@@ -276,11 +277,11 @@ module.exports = {
                 .collection(collection.CART_COLLECTION)
                 .findOne({ userId: objectId(obj.userId) })
                 .then((response) => {
-                    console.log(obj);
-                    console.log(response);
+                    //console.log(obj);
+                    //console.log(response);
                     let payStatus =
                         obj.payMode === "cod" ? "cod__pay" : "online__pending";
-                    console.log(payStatus);
+                    //console.log(payStatus);
                     let orderObject = {
                         userId: objectId(obj.userId),
                         deliveryDetails: {

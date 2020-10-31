@@ -7,14 +7,17 @@ function addToCart(productId, user) {
                 if (response) {
                     document.getElementById(
                         "navBarCartCount"
-                    ).innerHTML = response;
+                    ).innerHTML = response.count;
                 }
             },
         });
     } else {
-        alert("Please Login..");
+        if(confirm("Please Login")){
+            location.href='/login';
+        }
     }
 }
+
 
 function changeProductCount(proId, user, opp) {
     let currentCount = document.getElementById(proId).innerHTML;
