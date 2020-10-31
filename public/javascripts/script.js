@@ -7,7 +7,7 @@ function addToCart(productId, user) {
                 if (response) {
                     document.getElementById(
                         "navBarCartCount"
-                    ).innerHTML = response.count;
+                    ).innerHTML = response;
                 }
             },
         });

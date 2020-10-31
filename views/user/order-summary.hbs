@@ -14,13 +14,13 @@
             <tbody>
                 {{#each orderDetails}}
                 <tr>
-                    <th>1</th>
+                    <th>{{inc @key}}</th>
                     <td>{{this.deliveryDetails.address}}</td>
                     <td>{{this.deliveryDetails.phno}}</td>
                     <td>{{this.total}}</td>
                     <td>{{this.date}}</td>
                     <td>
-                        <a href="/show-product" class="btn btn-primary">Products</a>
+                        <a href="#" class="btn btn-primary">Products</a>
                     </td>
                 </tr>
                 {{/each}}
