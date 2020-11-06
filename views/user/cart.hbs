@@ -1,67 +1,73 @@
+<style>
+    body {
+        margin: 0;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        height: 5rem;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 3rem;
+    }
+
+    .one,
+    .two,
+    .three,
+    .four,
+    .five,
+    .six {
+        width: 10rem;
+        height: 5rem;
+        text-align: center;
+    }
+    .four{
+        background-color: white;
+    }
+</style>
+
 {{#if total}}
 
-<section class="container mt-5">
-    <table class="table table-borderless">
-        <thead>
-            <tr>
-                <div class="col-12">
-                <th scope="col">No</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Price</th>
-                <th scope="col">Image</th>
-                </div>
-                <div class="col-12">
-                <th scope="col">Quandity</th>
-                </div>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each productsInCart}}
-            <tr>
-                <th scope="row">{{inc @key}}</th>
-                {{#each products}}
-                <td>{{this.product__name}}</td>
-                <td>{{this.product__price}}</td>
-                <td><img height="auto" width="60px" src="/images/product-images/{{this._id}}.jpg" alt=""></td>
-                {{/each}}
-                <td>
+<section class="mt-3">
+<h2 class="text-center">Cart</h2>
+    {{#each productsInCart}}
+    <div class="container">
+        <div class="one">{{inc @key}}</div>
+        {{#each products}}
+        <div class="two">{{this.product__name}}</div>
+        <div class="three">Rs: {{this.product__price}}</div>
+        <div class="four"><img height="auto" width="60px" src="/images/product-images/{{this._id}}.jpg" alt=""></div>
+        {{/each}}
+        <div class="five">
+            <button class="btn btn-primary"
+                onclick="changeProductCount('{{this.productId}}','{{this.userId}}',-1)">-</button>
 
+            <span class="text-center" id="{{this.productId}}">{{this.count}}</span>
 
-                    <button class="btn btn-primary"
-                        onclick="changeProductCount('{{this.productId}}','{{this.userId}}',-1)">-</button>
-
-                    <span class="text-center" id="{{this.productId}}">{{this.count}}</span>
-
-                    <button class="btn btn-primary"
-                        onclick="changeProductCount('{{this.productId}}','{{this.userId}}',1)">+</button>
-
-
-                </td>
-                <td>
-                    <button class="btn btn-danger" onclick="removeProduct('{{this.productId}}','{{this.userId}}')">
-                        Remove
-                    </button>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
-    <table>
-        <thead>
-            <tr>
-                <div style="width: 100%;">
-                    <div class="card">
-                        <div class="card-body ml-auto mr-auto font-weight-bold">
-                            <span>Total :</span>
-                            <span id="totalAmount"> {{total}} </span>
-                        </div>
-                    </div>
-                    <div class="pt-2 pr-5">
-                        <a href="/orders" class="btn btn-success float-right">Proceed to Checkout</a>
-                    </div>
-                </div>
-            </tr>
-        </thead>
-    </table>
+            <button class="btn btn-primary"
+                onclick="changeProductCount('{{this.productId}}','{{this.userId}}',1)">+</button>
+        </div>
+        <div class="six">
+            <button class="btn btn-danger" onclick="removeProduct('{{this.productId}}','{{this.userId}}')">
+                Remove
+            </button>
+        </div>
+    </div>
+    {{/each}}
+</section>
+<section class="pt-3">
+    <div style="width: 100%;">
+        <div class="card">
+            <div class="card-body ml-auto mr-auto font-weight-bold">
+                <span>Total :</span>
+                <span id="totalAmount"> {{total}} </span>
+            </div>
+        </div>
+        <div class="pt-2 pr-5">
+            <a href="/orders" class="btn btn-success float-right">Proceed to Checkout</a>
+        </div>
+    </div>
 </section>
 
 {{else}}
