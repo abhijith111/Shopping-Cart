@@ -5,13 +5,13 @@
         <thead>
             <tr>
                 <div class="col-12">
-                <th scope="col">No</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Price</th>
-                <th scope="col">Image</th>
+                    <th scope="col">No</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Image</th>
                 </div>
                 <div class="col-12">
-                <th scope="col">Quandity</th>
+                    <th scope="col">Quandity</th>
                 </div>
             </tr>
         </thead>
@@ -25,17 +25,15 @@
                 <td><img height="auto" width="60px" src="/images/product-images/{{this._id}}.jpg" alt=""></td>
                 {{/each}}
                 <td>
+                    <div style="display: flex ;">
+                        <button class="btn btn-primary"
+                            onclick="changeProductCount('{{this.productId}}','{{this.userId}}',-1)">-</button>
 
+                        <span class="text-center" id="{{this.productId}}">{{this.count}}</span>
 
-                    <button class="btn btn-primary"
-                        onclick="changeProductCount('{{this.productId}}','{{this.userId}}',-1)">-</button>
-
-                    <span class="text-center" id="{{this.productId}}">{{this.count}}</span>
-
-                    <button class="btn btn-primary"
-                        onclick="changeProductCount('{{this.productId}}','{{this.userId}}',1)">+</button>
-
-
+                        <button class="btn btn-primary"
+                            onclick="changeProductCount('{{this.productId}}','{{this.userId}}',1)">+</button>
+                    </div>
                 </td>
                 <td>
                     <button class="btn btn-danger" onclick="removeProduct('{{this.productId}}','{{this.userId}}')">
