@@ -301,7 +301,7 @@ module.exports = {
                             db.get()
                                 .collection(collection.CART_COLLECTION)
                                 .removeOne({ userId: objectId(obj.userId) }).then(()=>{
-                                    resolve(insertObject)
+                                    resolve(insertObject.ops[0])
                                 });
                         });
                 });

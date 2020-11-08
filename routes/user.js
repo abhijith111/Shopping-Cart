@@ -103,6 +103,8 @@ router.post("/orders", varifyLogin, async (req, res) => {
     //console.log(req.body);
     let totalAmount = await userHelpers.getTotalAmount(req.body.userId);
     userHelpers.placeOrder(req.body, totalAmount).then((response) => {
+        //if(response.payStatus === 'cod')
+        console.log(response);
         res.json(response);
     });
     //console.log(req.body);
