@@ -5,7 +5,7 @@ var router = express.Router();
 var productHelpers = require("../helpers/product-helpers");
 var userHelpers = require("../helpers/user-helpers");
 
-const varifyLogin = (req, res, next) => {
+const verifyLogin = (req, res, next) => {
     if (req.session.loggedIn) {
         next();
     } else {
@@ -64,7 +64,7 @@ router.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
-router.get("/cart", varifyLogin, async (req, res) => {
+router.get("/cart", verifyLogin, async (req, res) => {
     let user = req.session.user;
     let productsInCart = await userHelpers.getProductsInCart(user._id);
     let total = await userHelpers.getTotalAmount(user._id);
@@ -72,7 +72,7 @@ router.get("/cart", varifyLogin, async (req, res) => {
     res.render("user/cart", { user, productsInCart, total });
 });
 
-router.get("/add-to-cart/:id", varifyLogin, (req, res) => {
+router.get("/add-to-cart/:id", verifyLogin, (req, res) => {
     // console.log("Api call");
     userHelpers.addToCart(req.session.user._id, req.params.id).then(() => {
         userHelpers.getCartCount(req.session.user._id).then((response) => {
@@ -95,26 +95,33 @@ router.post("/remove-product", (req, res) => {
         res.json(response);
     });
 });
-router.get("/orders", varifyLogin, async (req, res) => {
+router.get("/orders", verifyLogin, async (req, res) => {
     let totalAmount = await userHelpers.getTotalAmount(req.session.user._id);
     res.render("user/orders", { user: req.session.user, totalAmount });
 });
-router.post("/orders", varifyLogin, async (req, res) => {
+router.post("/orders", verifyLogin, async (req, res) => {
     //console.log(req.body);
     let totalAmount = await userHelpers.getTotalAmount(req.body.userId);
     userHelpers.placeOrder(req.body, totalAmount).then((response) => {
-        //if(response.payStatus === 'cod')
-        console.log(response);
-        res.json(response);
+        console.log(response._id);
+        if(response.payStatus === 'online__pending'){
+            userHelpers.generateRazorpay(response._id,response.total).then((response)=>{
+                response.payCod = false
+                res.json(response);
+            })
+        }else if(response.payStatus === 'cod__pay'){
+            res.json({payCod:true})
+        }
+
     });
     //console.log(req.body);
 });
 
-router.get("/order-success", varifyLogin, (req, res) => {
+router.get("/order-success", verifyLogin, (req, res) => {
     res.render("user/order-success", { user: req.session.user });
 });
 
-router.get("/order-summary", varifyLogin, (req, res) => {
+router.get("/order-summary", verifyLogin, (req, res) => {
     userHelpers.getOrderDetails(req.session.user._id).then((orderDetails) => {
         for (dateValue in orderDetails) {
             orderDetails[dateValue].date =
@@ -124,11 +131,21 @@ router.get("/order-summary", varifyLogin, (req, res) => {
                 "-" +
                 orderDetails[dateValue].date.getFullYear();
         }
-        //console.log(orderDetails);
+        console.log(orderDetails);
         res.render("user/order-summary", {
             user: req.session.user,
             orderDetails,
         });
     });
 });
+router.post('/verify-payment',(req,res)=>{
+    console.log(req.body);
+    userHelpers.verifyPayment(req.body).then(()=>{
+        userHelpers.changePaymentStatus(req.body['order[receipt]']).then((response) => {
+            res.json({paymentStatus:true})
+        })
+    }).catch((err)=> {
+        res.json({paymentStatus:false})
+    })
+})
 module.exports = router;
