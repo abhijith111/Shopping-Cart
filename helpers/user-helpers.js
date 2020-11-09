@@ -281,11 +281,8 @@ module.exports = {
                 .collection(collection.CART_COLLECTION)
                 .findOne({ userId: objectId(obj.userId) })
                 .then((response) => {
-                    //console.log(obj);
-                    //console.log(response);
                     let payStatus =
-                        obj.payMode === "cod" ? "cod__pay" : "online__pending";
-                    //console.log(payStatus);
+                        obj.payMode === "cod" ? "Cash On Delivery" : "Online Payment(pending)";
                     let orderObject = {
                         userId: objectId(obj.userId),
                         deliveryDetails: {
@@ -329,7 +326,7 @@ module.exports = {
     generateRazorpay: (orderId, total) => {
         return new Promise((resolve, reject) => {
             var options = {
-                amount: total, // amount in the smallest currency unit
+                amount: total*100, // amount in the smallest currency unit
                 currency: "INR",
                 receipt: orderId + "",
             };
@@ -337,7 +334,6 @@ module.exports = {
                 if (err) {
                     console.log(err);
                 } else {
-                    console.log("new Order", order);
                     resolve(order);
                 }
             });
@@ -368,7 +364,7 @@ module.exports = {
                 .updateOne({ _id: objectId(receiptNo) }, [
                     {
                         $set: {
-                            payStatus: "online__paid",
+                            payStatus: "Online Payment(paid)",
                         },
                     },
                 ])

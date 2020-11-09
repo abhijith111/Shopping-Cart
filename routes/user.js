@@ -100,21 +100,18 @@ router.get("/orders", verifyLogin, async (req, res) => {
     res.render("user/orders", { user: req.session.user, totalAmount });
 });
 router.post("/orders", verifyLogin, async (req, res) => {
-    //console.log(req.body);
     let totalAmount = await userHelpers.getTotalAmount(req.body.userId);
     userHelpers.placeOrder(req.body, totalAmount).then((response) => {
-        console.log(response._id);
-        if(response.payStatus === 'online__pending'){
+        if(response.payMode === 'online'){
             userHelpers.generateRazorpay(response._id,response.total).then((response)=>{
                 response.payCod = false
                 res.json(response);
             })
-        }else if(response.payStatus === 'cod__pay'){
+        }else if(response.payMode === 'cod'){
             res.json({payCod:true})
         }
 
     });
-    //console.log(req.body);
 });
 
 router.get("/order-success", verifyLogin, (req, res) => {
@@ -131,7 +128,6 @@ router.get("/order-summary", verifyLogin, (req, res) => {
                 "-" +
                 orderDetails[dateValue].date.getFullYear();
         }
-        console.log(orderDetails);
         res.render("user/order-summary", {
             user: req.session.user,
             orderDetails,
@@ -139,7 +135,6 @@ router.get("/order-summary", verifyLogin, (req, res) => {
     });
 });
 router.post('/verify-payment',(req,res)=>{
-    console.log(req.body);
     userHelpers.verifyPayment(req.body).then(()=>{
         userHelpers.changePaymentStatus(req.body['order[receipt]']).then((response) => {
             res.json({paymentStatus:true})

@@ -80,7 +80,7 @@ $("#checkout__form").submit((e) => {
 function razorpayPayment(order) {
     var options = {
         key: "rzp_test_e7OF7N8GMEoRU5", // Enter the Key ID generated from the Dashboard
-        amount: ((order.amount)*1000), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        amount: order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
         currency: "INR",
         name: "Shopping-Cart",
         description: "Test Transaction",
@@ -124,7 +124,7 @@ function verifyPayment(payment, order) {
         data: { payment, order },
         success: (response)=>{
             if (response.paymentStatus){
-                alert('payment success')
+                location.href = '/order-success/'
             }else{
                 alert('payment failed')
             }

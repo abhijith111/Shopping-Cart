@@ -1,3 +1,5 @@
+{{#if orderDetails}}
+
 <section>
     <div class="container">
         <table class="table text-center">
@@ -9,6 +11,7 @@
                     <th scope="col">Phone Number</th>
                     <th scope="col">Total Amount</th>
                     <th scope="col">Date Ordered</th>
+                    <th scope="col">Payment Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -19,6 +22,7 @@
                     <td>{{this.deliveryDetails.phno}}</td>
                     <td>{{this.total}}</td>
                     <td>{{this.date}}</td>
+                    <td>{{this.payStatus}}</td>
                     <td>
                         <a href="#" class="btn btn-primary">Products</a>
                     </td>
@@ -28,3 +32,16 @@
         </table>
     </div>
 </section>
+
+{{else}}
+
+<section>
+    <div class="container pt-5">
+        <div><h2 class="text-center">No Orders!</h2></div>
+        <div class="text-center pt-3">
+            <button class="btn btn-primary">Shop Now</button>
+        </div>
+    </div>
+</section>
+
+{{/if}}
