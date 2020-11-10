@@ -155,48 +155,7 @@ module.exports = {
             }
         });
     },
-    changeCartCount: (obj) => {
-        return new Promise((resolve, reject) => {
-            obj.count = parseInt(obj.count);
-            obj.opp = parseInt(obj.opp);
-            if (obj.count == 1 && obj.opp == -1) {
-                db.get()
-                    .collection(collection.CART_COLLECTION)
-                    .updateOne(
-                        {
-                            userId: objectId(obj.userId),
-                            "products.productId": objectId(obj.productId),
-                        },
-                        {
-                            $pull: {
-                                products: {
-                                    productId: objectId(obj.productId),
-                                },
-                            },
-                        }
-                    )
-                    .then(() => {
-                        resolve({ itemRemoved: true });
-                    });
-            } else {
-                db.get()
-                    .collection(collection.CART_COLLECTION)
-                    .updateOne(
-                        {
-                            userId: objectId(obj.userId),
-                            "products.productId": objectId(obj.productId),
-                        },
-                        {
-                            $inc: { "products.$.count": obj.opp },
-                        }
-                    )
-                    .then(() => {
-                        let newCount = obj.count + obj.opp;
-                        resolve({ itemRemoved: false, count: newCount });
-                    });
-            }
-        });
-    },
+
     removeProduct: (req) => {
         return new Promise((resolve, reject) => {
             db.get()
@@ -282,7 +241,9 @@ module.exports = {
                 .findOne({ userId: objectId(obj.userId) })
                 .then((response) => {
                     let payStatus =
-                        obj.payMode === "cod" ? "Cash On Delivery" : "Online Payment(pending)";
+                        obj.payMode === "cod"
+                            ? "Cash On Delivery"
+                            : "Online Payment(pending)";
                     let orderObject = {
                         userId: objectId(obj.userId),
                         deliveryDetails: {
@@ -326,7 +287,7 @@ module.exports = {
     generateRazorpay: (orderId, total) => {
         return new Promise((resolve, reject) => {
             var options = {
-                amount: total*100, // amount in the smallest currency unit
+                amount: total * 100, // amount in the smallest currency unit
                 currency: "INR",
                 receipt: orderId + "",
             };
@@ -369,8 +330,96 @@ module.exports = {
                     },
                 ])
                 .then((response) => {
-                    resolve()
+                    resolve();
+                });
+        });
+    },
+    changeCartCount: (obj) => {
+        return new Promise((resolve, reject) => {
+            obj.count = parseInt(obj.count);
+            obj.opp = parseInt(obj.opp);
+            if (obj.count == 1 && obj.opp == -1) {
+                db.get()
+                    .collection(collection.CART_COLLECTION)
+                    .updateOne(
+                        {
+                            userId: objectId(obj.userId),
+                            "products.productId": objectId(obj.productId),
+                        },
+                        {
+                            $pull: {
+                                products: {
+                                    productId: objectId(obj.productId),
+                                },
+                            },
+                        }
+                    )
+                    .then(() => {
+                        resolve({ itemRemoved: true });
+                    });
+            } else {
+                db.get()
+                    .collection(collection.CART_COLLECTION)
+                    .updateOne(
+                        {
+                            userId: objectId(obj.userId),
+                            "products.productId": objectId(obj.productId),
+                        },
+                        {
+                            $inc: { "products.$.count": obj.opp },
+                        }
+                    )
+                    .then(() => {
+                        let newCount = obj.count + obj.opp;
+                        resolve({ itemRemoved: false, count: newCount });
+                    });
+            }
+        });
+    },
+    getOrderedProducts: (orderId) => {
+        return new Promise((resolve, reject) => {
+            db.get()
+                .collection(collection.ORDER_COLECTION)
+                .aggregate([
+                    {
+                        $match: { _id: objectId(orderId) },
+                    },
+                    {
+                        $unwind: "$products",
+                    },
+                    {
+                        $lookup: {
+                            from: collection.PRODUCT_COLLECTION,
+                            localField: "products.productId",
+                            foreignField: "_id",
+                            as: "productDetails",
+                        },
+                    },
+                    {
+                        $project: {
+                            productDetails: 1,
+                        },
+                    },
+                    {
+                        $unwind: "$productDetails",
+                    },
+                ])
+                .toArray()
+                .then((response) => {
+                    resolve(response);
                 });
         });
     },
 };
+
+// $project: {
+//     userId: "$userId",
+//     productId: "$products.productId",
+//     count: "$products.count",
+// },
+// $lookup: {
+//     from: collection.PRODUCT_COLLECTION,
+//     localField: "productId",
+//     foreignField: "_id",
+//     as: "products",
+// },

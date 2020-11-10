@@ -143,4 +143,9 @@ router.post('/verify-payment',(req,res)=>{
         res.json({paymentStatus:false})
     })
 })
+router.get('/view-ordered-products/:id',verifyLogin,(req,res) => {
+    userHelpers.getOrderedProducts(req.params.id).then((response)=>{
+        res.json(response)
+    })
+})
 module.exports = router;

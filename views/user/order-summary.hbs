@@ -24,7 +24,39 @@
                     <td>{{this.date}}</td>
                     <td>{{this.payStatus}}</td>
                     <td>
-                        <a href="#" class="btn btn-primary">Products</a>
+                        {{!-- <a href="/view-ordered-products/{{this._id}}" class="btn btn-primary">Products</a> --}}
+                        <!-- Button trigger modal -->
+                        <button onclick="viewOrderedProducts('{{this._id}}')" class="btn btn-primary"
+                            data-toggle="modal" data-target="#productViewPopup">
+                            Products
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="productViewPopup" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <span>!!__err__development__stage__!!</span>
+                                        <div class="container">
+                                            <div class="firstContainer">
+                                                <div class="orderPopupImage">
+                                                    <img class="orderPopupImage" src="/images/product-images/5f9c2bc53bcb0a6a248fdf8b.jpg" alt="">
+                                                </div>
+                                                <div class="orderPopupPrice"></div>
+                                                <div class="orderPopupQuantity"></div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 {{/each}}
@@ -37,7 +69,9 @@
 
 <section>
     <div class="container pt-5">
-        <div><h2 class="text-center">No Orders!</h2></div>
+        <div>
+            <h2 class="text-center">No Orders!</h2>
+        </div>
         <div class="text-center pt-3">
             <a href="/" class="btn btn-primary">Shop Now</a>
         </div>

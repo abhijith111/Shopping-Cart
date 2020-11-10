@@ -77,6 +77,16 @@ $("#checkout__form").submit((e) => {
     });
 });
 
+function viewOrderedProducts(orderId){
+    $.ajax({
+        url: "/view-ordered-products/" + orderId,
+        method: "get",
+        success: (response)=>{
+            console.log(response);
+        }
+    })
+}
+
 function razorpayPayment(order) {
     var options = {
         key: "rzp_test_e7OF7N8GMEoRU5", // Enter the Key ID generated from the Dashboard
@@ -131,3 +141,4 @@ function verifyPayment(payment, order) {
         }
     });
 }
+
