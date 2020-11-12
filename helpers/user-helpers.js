@@ -411,15 +411,3 @@ module.exports = {
         });
     },
 };
-
-// $project: {
-//     userId: "$userId",
-//     productId: "$products.productId",
-//     count: "$products.count",
-// },
-// $lookup: {
-//     from: collection.PRODUCT_COLLECTION,
-//     localField: "productId",
-//     foreignField: "_id",
-//     as: "products",
-// },
