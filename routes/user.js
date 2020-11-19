@@ -6,7 +6,7 @@ var productHelpers = require("../helpers/product-helpers");
 var userHelpers = require("../helpers/user-helpers");
 
 const verifyLogin = (req, res, next) => {
-    if (req.session.loggedIn) {
+    if (req.session.userLoggedIn) {
         next();
     } else {
         res.redirect("/login");
@@ -25,11 +25,11 @@ router.get("/", async function (req, res, next) {
 });
 
 router.get("/login", (req, res) => {
-    if (req.session.loggedIn) {
+    if (req.session.userLoggedIn) {
         res.redirect("/");
     } else {
-        res.render("user/user-login", { loginErrFlag: req.session.loginErr });
-        req.session.loginErr = false;
+        res.render("user/user-login", { loginErrFlag: req.session.userLoginErr });
+        req.session.userLoginErr = false;
     }
 });
 
@@ -38,7 +38,7 @@ router.get("/signup", (req, res) => {
 });
 router.post("/signup", (req, res) => {
     userHelpers.doSignup(req.body).then((response) => {
-        req.session.loggedIn = true;
+        req.session.userLoggedIn = true;
         req.session.user = response;
         //console.log(response);
     });
@@ -49,18 +49,19 @@ router.post("/login", (req, res) => {
     userHelpers.dologin(req.body).then((response) => {
         if (response.status) {
             req.session.user = response.user;
-            req.session.loggedIn = true;
+            req.session.userLoggedIn = true;
             //console.log(response.user);
             res.redirect("/");
         } else {
-            req.session.loginErr = true;
+            req.session.userLoginErr = true;
             res.redirect("/login");
         }
     });
 });
 
 router.get("/logout", (req, res) => {
-    req.session.destroy();
+    req.session.user = null;
+    req.session.userLoggedIn = null;
     res.redirect("/");
 });
 

@@ -3,6 +3,33 @@ const app = require("../app");
 var router = express.Router();
 const productHelpers = require("../helpers/product-helpers");
 var fs = require("fs");
+const session = require("express-session");
+const adminHelpers = require("../helpers/admin-helpers");
+
+router.get("/super-admin", (req, res) => {
+    // adminHelpers.addSuperUser().then((response) => {
+    //     console.log(response);
+    // })
+    res.render("admin/super-admin", { admin: true });
+});
+
+router.post("/superAdminLogin", (req, res) => {
+    adminHelpers.doLogin(req.body).then((response) => {
+        if (response.login) {
+            res.render("admin/manage-admin", { admin: true });
+        } else {
+            res.send("Err__super__user__login");
+        }
+    });
+});
+
+router.get('/add-admin',(req,res)=> {
+    res.render("admin/add-admin",{admin: true});
+})
+router.post('add-admin',(req,res)=>{
+    console.log(req.body);
+    res.send("admin add");
+})
 
 router.get("/", function (req, res) {
     productHelpers.getAllProducts().then((products) => {

@@ -26,7 +26,6 @@ module.exports = {
 
     dologin: (user) => {
         return new Promise(async (resolve, reject) => {
-            let loginStatus = false;
             let response = {};
             let userAtDB = await db
                 .get()
@@ -258,7 +257,7 @@ module.exports = {
                         date: new Date(),
                     };
                     db.get()
-                        .collection(collection.ORDER_COLECTION)
+                        .collection(collection.ORDER_COLLECTION)
                         .insertOne(orderObject)
                         .then((insertObject) => {
                             db.get()
@@ -274,7 +273,7 @@ module.exports = {
     getOrderDetails: (userId) => {
         return new Promise((resolve, reject) => {
             db.get()
-                .collection(collection.ORDER_COLECTION)
+                .collection(collection.ORDER_COLLECTION)
                 .find({
                     userId: objectId(userId),
                 })
@@ -321,7 +320,7 @@ module.exports = {
     changePaymentStatus: (receiptNo) => {
         return new Promise((resolve, reject) => {
             db.get()
-                .collection(collection.ORDER_COLECTION)
+                .collection(collection.ORDER_COLLECTION)
                 .updateOne({ _id: objectId(receiptNo) }, [
                     {
                         $set: {
@@ -379,7 +378,7 @@ module.exports = {
     getOrderedProducts: (orderId) => {
         return new Promise((resolve, reject) => {
             db.get()
-                .collection(collection.ORDER_COLECTION)
+                .collection(collection.ORDER_COLLECTION)
                 .aggregate([
                     {
                         $match: { _id: objectId(orderId) },

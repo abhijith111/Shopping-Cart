@@ -1,0 +1,25 @@
+<section>
+    <div class="container mt-5">
+        <h2 class="text-center">Add ADMIN</h2>
+        <form action="/admin/add-admin" enctype="multipart/form-data" method="post">
+            <div class="form-group">
+                <label for="admin__name">Name</label>
+                <input type="text" class="form-control" id="admin__name" name="admin__name">
+            </div>
+            <div class="form-group">
+                <label for="admin__user__name">Username</label>
+                <input type="text" class="form-control" id="admin__user__name" name="admin__user__name">
+            </div>
+
+            <div class="form-group">
+                <label for="admin__password">Password</label>
+                <input type="password" class="form-control" id="admin__password" name="admin__password">
+            </div>
+            <div class="form-group">
+                <label for="image">Image</label>
+                <input type="file" class="form-control" id="image" name="image">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</section>
